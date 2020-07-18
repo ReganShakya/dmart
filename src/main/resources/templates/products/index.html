@@ -1,0 +1,42 @@
+<div th:replace="shared/header"></div>
+
+<div class="box">
+    <div class="box-header with-border">
+        <a th:href="@{'/'+${pageURI}+'/create'}" class="add-btn" title="Create new Task">
+            <span class="glyphicon glyphicon-plus"></span>
+        </a>
+    </div>
+    
+    <div th:replace="products/table"></div>
+    <div th:replace="products/components/createModal"></div>
+       
+</div>
+
+<div th:replace="shared/footer"></div>
+
+<script>
+    $(document).ready(function(){
+        
+        $('.add-btn').on('click', function(){
+            var $dialog = $('#form-dialog');
+            $dialog.find('.modal-title')
+                    .html('Add Product');
+            $dialog.modal();
+            return false;
+        });
+        
+        $('#view-table').on('click','.edit-btn', function(){
+            var $id = $(this).attr('rel');
+            $.getJSON('/products/json/'+$id,function(data){ 
+                console.log(data);
+                $('input[name=name]').val(data.name);
+                $("#supplier select").val(data.supplierId); 
+            });
+            var $dialog = $('#form-dialog');
+            $dialog.find('.modal-tile')
+                    .html('Edit Product');
+            $dialog.modal();
+            return false; 
+        });
+    });
+</script>

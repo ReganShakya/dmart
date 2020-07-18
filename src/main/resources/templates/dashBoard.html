@@ -1,0 +1,488 @@
+
+<div th:replace="shared/header"></div>
+
+
+<!-- Info boxes -->
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-cart-outline"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Total Products</span>
+                <span class="info-box-number" th:text="${products.size()}"></span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-red"><span class="iconify" data-icon="ion:bar-chart-outline" data-inline="false"></span></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Stocks</span>
+                <span class="info-box-number" id="totStock">41,410</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+
+    <!-- fix for small devices only -->
+    <div class="clearfix visible-sm-block"></div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="ion ion-ios-people-outline"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Suppliers List</span>
+                <span class="info-box-number" th:text="${suppliers.size()}">760</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Units</span>
+                <span class="info-box-number">2,000</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Monthly Recap Report</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-wrench"></i></button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class="text-center">
+                            <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
+                        </p>
+
+                        <div class="chart">
+                            <!-- Sales Chart Canvas -->
+                            <canvas id="salesChart" style="height: 180px;"></canvas>
+                        </div>
+                        <!-- /.chart-responsive -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-4">
+                        <p class="text-center">
+                            <strong>Stock</strong>
+                        </p>
+
+                        <div class="progress-group" th:each="stock:${stocks}">
+                            <span class="progress-text" th:text="${stock.name}"></span>
+                            <span class="progress-number" th:text="${stock.quantity}"><b>160</b>/200</span>
+
+                            <div class="progress sm">
+                                <div class="progress-bar progress-bar-aqua"  th:id="${stock.name.replaceAll(' ', '')}"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- ./box-body -->
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-sm-3 col-xs-6">
+                        <div class="description-block border-right">
+                            <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
+                            <h5 class="description-header">$35,210.43</h5>
+                            <span class="description-text">TOTAL REVENUE</span>
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-3 col-xs-6">
+                        <div class="description-block border-right">
+                            <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
+                            <h5 class="description-header">$10,390.90</h5>
+                            <span class="description-text">TOTAL COST</span>
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-3 col-xs-6">
+                        <div class="description-block border-right">
+                            <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
+                            <h5 class="description-header">$24,813.53</h5>
+                            <span class="description-text">TOTAL PROFIT</span>
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-3 col-xs-6">
+                        <div class="description-block">
+                            <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
+                            <h5 class="description-header">1200</h5>
+                            <span class="description-text">GOAL COMPLETIONS</span>
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.box-footer -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+
+<!-- Main row -->
+<div class="row">
+    <!-- Left col -->
+    <div class="col-md-8">
+
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Latest Orders</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table class="table no-margin">
+                        <thead>
+                            <tr>
+                                <th>Id</th>             
+                                <th>Product</th>             
+                                <th>Supplier</th>
+                                <th>Code</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="record:${orderDetails}">
+                                <td th:text="${record.id}"></td>
+                                <td th:text="${record.product.name}"></td>
+                                <td th:text="${record.product.supplier.name}"></td>
+                                <td th:text="${record.unit.code}"></td>
+                                <td th:text="${record.quantity}"></td>                   
+                                <td th:text="${record.price}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+                <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
+                <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+            </div>
+            <!-- /.box-footer -->
+        </div>
+        <!-- /.box -->
+
+        <!-- /.box -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <!-- USERS LIST -->
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Latest Suppliers</h3>
+
+                        <div class="box-tools pull-right">
+                            <span class="label label-danger">8 New Suppliers</span>
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <ul class="users-list clearfix">
+                            <li  th:each="supplier:${suppliers}" >
+                                <!--<img src="/webjars/adminlte/2.3.11/dist/img/user6-128x128.jpg" alt="User Image">-->
+                                <a class="users-list-name" href="#" th:text="${supplier.name}">Alexander Pierce</a>
+                                <a class="users-list-name" href="#" th:text="${supplier.address}">Alexander Pierce</a>
+                                <a class="users-list-name" href="#" th:text="${supplier.email}">Alexander Pierce</a>
+                                <a class="users-list-name" href="#" th:text="${supplier.contactNo}">Alexander Pierce</a>
+                                <span class="users-list-date">Today</span>
+                            </li>
+                        </ul>
+                        <!-- /.users-list -->
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer text-center">
+                        <a href="javascript:void(0)" class="uppercase">View All Users</a>
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+                <!--/.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- calendar & BOX PANE -->
+        <div class="box box-success">
+            <!-- Calendar -->
+            <div class="box box-solid bg-green-gradient">
+                <div class="box-header ui-sortable-handle" style="cursor: move;">
+                    <i class="fa fa-calendar"></i>
+
+                    <h3 class="box-title">Calendar</h3>
+                    <!-- tools box -->
+                    <div class="pull-right box-tools">
+                        <!-- button with a dropdown -->
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-bars"></i></button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li><a href="#">Add new event</a></li>
+                                <li><a href="#">Clear events</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">View calendar</a></li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                    <!-- /. tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <!--The calendar -->
+                    <div id="calendar" style="width: 100%"><div class="datepicker datepicker-inline"><div class="datepicker-days" style=""><table class="table-condensed"><thead><tr><th colspan="7" class="datepicker-title" style="display: none;"></th></tr><tr><th class="prev">«</th><th colspan="5" class="datepicker-switch">July 2020</th><th class="next">»</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="old day" data-date="1593302400000">28</td><td class="old day" data-date="1593388800000">29</td><td class="old day" data-date="1593475200000">30</td><td class="day" data-date="1593561600000">1</td><td class="day" data-date="1593648000000">2</td><td class="day" data-date="1593734400000">3</td><td class="day" data-date="1593820800000">4</td></tr><tr><td class="day" data-date="1593907200000">5</td><td class="day" data-date="1593993600000">6</td><td class="day" data-date="1594080000000">7</td><td class="day" data-date="1594166400000">8</td><td class="day" data-date="1594252800000">9</td><td class="day" data-date="1594339200000">10</td><td class="day" data-date="1594425600000">11</td></tr><tr><td class="day" data-date="1594512000000">12</td><td class="day" data-date="1594598400000">13</td><td class="day" data-date="1594684800000">14</td><td class="day" data-date="1594771200000">15</td><td class="day" data-date="1594857600000">16</td><td class="day" data-date="1594944000000">17</td><td class="day" data-date="1595030400000">18</td></tr><tr><td class="day" data-date="1595116800000">19</td><td class="day" data-date="1595203200000">20</td><td class="day" data-date="1595289600000">21</td><td class="day" data-date="1595376000000">22</td><td class="active day" data-date="1595462400000">23</td><td class="day" data-date="1595548800000">24</td><td class="day" data-date="1595635200000">25</td></tr><tr><td class="day" data-date="1595721600000">26</td><td class="day" data-date="1595808000000">27</td><td class="day" data-date="1595894400000">28</td><td class="day" data-date="1595980800000">29</td><td class="day" data-date="1596067200000">30</td><td class="day" data-date="1596153600000">31</td><td class="new day" data-date="1596240000000">1</td></tr><tr><td class="new day" data-date="1596326400000">2</td><td class="new day" data-date="1596412800000">3</td><td class="new day" data-date="1596499200000">4</td><td class="new day" data-date="1596585600000">5</td><td class="new day" data-date="1596672000000">6</td><td class="new day" data-date="1596758400000">7</td><td class="new day" data-date="1596844800000">8</td></tr></tbody><tfoot><tr><th colspan="7" class="today" style="display: none;">Today</th></tr><tr><th colspan="7" class="clear" style="display: none;">Clear</th></tr></tfoot></table></div><div class="datepicker-months" style="display: none;"><table class="table-condensed"><thead><tr><th colspan="7" class="datepicker-title" style="display: none;"></th></tr><tr><th class="prev">«</th><th colspan="5" class="datepicker-switch">2020</th><th class="next">»</th></tr></thead><tbody><tr><td colspan="7"><span class="month">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month focused active">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month">Dec</span></td></tr></tbody><tfoot><tr><th colspan="7" class="today" style="display: none;">Today</th></tr><tr><th colspan="7" class="clear" style="display: none;">Clear</th></tr></tfoot></table></div><div class="datepicker-years" style="display: none;"><table class="table-condensed"><thead><tr><th colspan="7" class="datepicker-title" style="display: none;"></th></tr><tr><th class="prev">«</th><th colspan="5" class="datepicker-switch">2020-2029</th><th class="next">»</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2019</span><span class="year active focused">2020</span><span class="year">2021</span><span class="year">2022</span><span class="year">2023</span><span class="year">2024</span><span class="year">2025</span><span class="year">2026</span><span class="year">2027</span><span class="year">2028</span><span class="year">2029</span><span class="year new">2030</span></td></tr></tbody><tfoot><tr><th colspan="7" class="today" style="display: none;">Today</th></tr><tr><th colspan="7" class="clear" style="display: none;">Clear</th></tr></tfoot></table></div><div class="datepicker-decades" style="display: none;"><table class="table-condensed"><thead><tr><th colspan="7" class="datepicker-title" style="display: none;"></th></tr><tr><th class="prev">«</th><th colspan="5" class="datepicker-switch">2000-2090</th><th class="next">»</th></tr></thead><tbody><tr><td colspan="7"><span class="decade old">1990</span><span class="decade">2000</span><span class="decade">2010</span><span class="decade active focused">2020</span><span class="decade">2030</span><span class="decade">2040</span><span class="decade">2050</span><span class="decade">2060</span><span class="decade">2070</span><span class="decade">2080</span><span class="decade">2090</span><span class="decade new">2100</span></td></tr></tbody><tfoot><tr><th colspan="7" class="today" style="display: none;">Today</th></tr><tr><th colspan="7" class="clear" style="display: none;">Clear</th></tr></tfoot></table></div><div class="datepicker-centuries" style="display: none;"><table class="table-condensed"><thead><tr><th colspan="7" class="datepicker-title" style="display: none;"></th></tr><tr><th class="prev">«</th><th colspan="5" class="datepicker-switch">2000-2900</th><th class="next">»</th></tr></thead><tbody><tr><td colspan="7"><span class="century old">1900</span><span class="century active focused">2000</span><span class="century">2100</span><span class="century">2200</span><span class="century">2300</span><span class="century">2400</span><span class="century">2500</span><span class="century">2600</span><span class="century">2700</span><span class="century">2800</span><span class="century">2900</span><span class="century new">3000</span></td></tr></tbody><tfoot><tr><th colspan="7" class="today" style="display: none;">Today</th></tr><tr><th colspan="7" class="clear" style="display: none;">Clear</th></tr></tfoot></table></div></div></div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-black">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- Progress bars -->
+                            <div class="clearfix">
+                                <span class="pull-left">Task #1</span>
+                                <small class="pull-right">90%</small>
+                            </div>
+                            <div class="progress xs">
+                                <div class="progress-bar progress-bar-green" style="width: 90%;"></div>
+                            </div>
+
+                            <div class="clearfix">
+                                <span class="pull-left">Task #2</span>
+                                <small class="pull-right">70%</small>
+                            </div>
+                            <div class="progress xs">
+                                <div class="progress-bar progress-bar-green" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-6">
+                            <div class="clearfix">
+                                <span class="pull-left">Task #3</span>
+                                <small class="pull-right">60%</small>
+                            </div>
+                            <div class="progress xs">
+                                <div class="progress-bar progress-bar-green" style="width: 60%;"></div>
+                            </div>
+
+                            <div class="clearfix">
+                                <span class="pull-left">Task #4</span>
+                                <small class="pull-right">40%</small>
+                            </div>
+                            <div class="progress xs">
+                                <div class="progress-bar progress-bar-green" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+    <!-- /.col -->
+
+    <div class="col-md-4">
+        <!-- solid sales graph -->
+        <div class="box box-solid bg-teal-gradient">
+            <div class="box-header ui-sortable-handle" style="cursor: move;">
+                <i class="fa fa-th"></i>
+
+                <h3 class="box-title">Sales Graph</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body border-radius-none">
+                <div class="chart" id="line-chart" style="height: 250px; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><svg height="250" version="1.1" width="604.8" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="overflow: hidden; position: relative; left: -0.025px; top: -0.8px;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with 2.3.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><text x="40.609375" y="213.78125" text-anchor="end" font-family="Open Sans" font-size="10px" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: Open Sans ; font-size: 10px; font-weight: normal;" font-weight="normal"><tspan dy="3.203125" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">0</tspan></text><path fill="none" stroke="#efefef" d="M53.109375,213.78125H579.8" stroke-width="0.4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="40.609375" y="166.5859375" text-anchor="end" font-family="Open Sans" font-size="10px" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: Open Sans ; font-size: 10px; font-weight: normal;" font-weight="normal"><tspan dy="3.1953125" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">5,000</tspan></text><path fill="none" stroke="#efefef" d="M53.109375,166.5859375H579.8" stroke-width="0.4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="40.609375" y="119.390625" text-anchor="end" font-family="Open Sans" font-size="10px" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family:  Open Sans ; font-size: 10px; font-weight: normal;" font-weight="normal"><tspan dy="3.203125" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">10,000</tspan></text><path fill="none" stroke="#efefef" d="M53.109375,119.390625H579.8" stroke-width="0.4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="40.609375" y="72.1953125" text-anchor="end" font-family="Open Sans" font-size="10px" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family:  Open Sans ; font-size: 10px; font-weight: normal;" font-weight="normal"><tspan dy="3.1953125" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">15,000</tspan></text><path fill="none" stroke="#efefef" d="M53.109375,72.1953125H579.8" stroke-width="0.4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="40.609375" y="25" text-anchor="end" font-family="Open Sans" font-size="10px" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family:  Open Sans ; font-size: 10px; font-weight: normal;" font-weight="normal"><tspan dy="3.203125" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">20,000</tspan></text><path fill="none" stroke="#efefef" d="M53.109375,25H579.8" stroke-width="0.4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="483.1653895808019" y="226.28125" text-anchor="middle" font-family="Open Sans" font-size="10px" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family:  Open Sans ; font-size: 10px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,5.6094)"><tspan dy="3.203125" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">2013</tspan></text><text x="248.9384530680437" y="226.28125" text-anchor="middle" font-family="Open Sans" font-size="10px" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family:  Open Sans ; font-size: 10px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,5.6094)"><tspan dy="3.203125" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">2012</tspan></text><path fill="none" stroke="#efefef" d="M53.109375,188.616709375C67.82855407047387,188.352415625,97.26691221142163,190.209551171875,111.9860912818955,187.559534375C126.70527035236937,184.909517578125,156.14362849331712,168.58985562670765,170.862807563791,167.416575C185.4219955574119,166.25604742358266,214.54037154465368,180.463719140625,229.09955953827458,178.2243015625C243.65874753189547,175.984883984375,272.77712351913726,151.73428187542694,287.3363115127582,149.50123437500002C302.0554905832321,147.24364789105195,331.49384872417977,157.913798828125,346.21302779465367,160.261765625C360.93220686512757,162.609732421875,390.37056500607525,179.44003218066942,405.08974407654915,168.28496875000002C419.6489320701701,157.25115600879442,448.7673080574118,78.4668785501554,463.32649605103273,71.5062609375C477.7256929678006,64.6221336282804,506.52408680133647,105.15649281850962,520.9232837181044,112.9059890625C535.6424627885783,120.82769633413463,565.080820929526,128.869803515625,579.8,134.191075" stroke-width="2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><circle cx="53.109375" cy="188.616709375" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="111.9860912818955" cy="187.559534375" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="170.862807563791" cy="167.416575" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="229.09955953827458" cy="178.2243015625" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="287.3363115127582" cy="149.50123437500002" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="346.21302779465367" cy="160.261765625" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="405.08974407654915" cy="168.28496875000002" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="463.32649605103273" cy="71.5062609375" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="520.9232837181044" cy="112.9059890625" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="579.8" cy="134.191075" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle></svg><div class="morris-hover morris-default-style" style="left: 416.964px; top: 4px; display: none;"><div class="morris-hover-row-label">2012 Q4</div><div class="morris-hover-point" style="color: #efefef">
+                            Item 1:
+                            15,073
+                        </div></div></div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer no-border">
+                <div class="row">
+                    <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                        <div style="display:inline;width:60px;height:60px;"><canvas width="75" height="75" style="width: 60px; height: 60px;"></canvas><input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60" data-fgcolor="#39CCCC" readonly="readonly" style="width: 34px; height: 20px; position: absolute; vertical-align: middle; margin-top: 20px; margin-left: -47px; border: 0px; background: none; font: bold 12px Arial; text-align: center; color: rgb(57, 204, 204); padding: 0px; -webkit-appearance: none;"></div>
+
+                        <div class="knob-label">Mail-Orders</div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                        <div style="display:inline;width:60px;height:60px;"><canvas width="75" height="75" style="width: 60px; height: 60px;"></canvas><input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60" data-fgcolor="#39CCCC" readonly="readonly" style="width: 34px; height: 20px; position: absolute; vertical-align: middle; margin-top: 20px; margin-left: -47px; border: 0px; background: none; font: bold 12px Arial; text-align: center; color: rgb(57, 204, 204); padding: 0px; -webkit-appearance: none;"></div>
+
+                        <div class="knob-label">Online</div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-xs-4 text-center">
+                        <div style="display:inline;width:60px;height:60px;"><canvas width="75" height="75" style="width: 60px; height: 60px;"></canvas><input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60" data-fgcolor="#39CCCC" readonly="readonly" style="width: 34px; height: 20px; position: absolute; vertical-align: middle; margin-top: 20px; margin-left: -47px; border: 0px; background: none; font: bold 12px Arial; text-align: center; color: rgb(57, 204, 204); padding: 0px; -webkit-appearance: none;"></div>
+
+                        <div class="knob-label">In-Store</div>
+                    </div>
+                    <!-- ./col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.box-footer -->
+        </div>
+        <!-- /.box -->
+
+
+        <!-- PRODUCT LIST -->
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Recently Added Products</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <ul class="products-list product-list-in-box" th:each="product:${products}">
+                    <li class="item">
+                        <div class="product-img">
+                            <img src="/webjars/adminlte/2.3.11/dist/img/default-50x50.gif" alt="Product Image">
+                        </div>
+                        <div class="product-info">
+                            <a href="javascript:void(0)" class="product-title" th:text="${product.name}">Samsung TV</a>
+                            <span class="label label-default pull-right" th:text="${product.supplier.name}">$1800</span>
+                            <span class="product-description">
+                                <span th:if="${product.status}" class="label label-success">Active</span>
+                                <span th:if="${!product.status}" class="label label-warning">Inactive</span>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="box-footer text-center">
+                <a href="javascript:void(0)" class="uppercase pull-left" id='loadmore'>View More Products</a>
+                <a href="javascript:void(0)" class="uppercase pull-right" id='showless'>Show Less Products</a>
+            </div>
+            <!-- /.box-footer -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+
+
+<div th:replace="shared/footer"></div>
+<script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#title').html("DashBoard");
+        $('#loadmore').attr({hidden: false});
+        $('#showless').attr({hidden: true});
+
+        //set width of the stock bar graph
+        $.get('/stocks/distinct', function (data) {
+            var sum = 0;
+            $.each(data, function (index, data) {
+                sum += parseInt(data.quantity);
+            });
+            $('#totStock').html(sum);
+            var quantity = 0;
+            $.each(data, function (index, data) {
+                quantity = data.quantity / sum * 100;
+                $('#' + data.name.replace(/ /g, '') + '').css('width', '' + quantity + '%');
+            });
+        });
+
+        //view more option for product display
+        var x = 4;
+        $('.item').hide();
+        $('.products-list li:lt(' + x + ')').show();
+        $('#loadmore').on('click', function () {
+            $.get('/products/json', function (data) {
+                var len = data.length;
+                x = (x + 4 <= len) ? x + 4 : len;
+                $('.products-list li:lt(' + x + ')').slideDown(1000);
+                $('#showless').attr({hidden: false});
+                if (x >= len) {
+                    $('#loadmore').attr({hidden: true});
+                }
+            });
+        });
+
+        //show leass option for product display
+        $('#showless').on('click', function () {
+            $('.products-list').find('li').not(':lt(4)').slideUp(1000);
+            $('#loadmore').attr({hidden: false});
+            $('#showless').attr({hidden: true});
+        });
+    });
+
+</script>

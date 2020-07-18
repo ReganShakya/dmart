@@ -1,0 +1,32 @@
+
+
+<div th:replace="shared/header"></div>
+<div class="box box-primary">
+    <form role="form" method="post" th:action="@{'/'+${pageURI}}">
+        <div class="box-body">
+
+            <div class="box-body" id="view-table">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Products</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="record:${records}">
+                            <td th:text="${record.name}"></td>
+                            <td th:text="${record.quantity}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <input type="text" th:value="${record}" readonly/>
+
+            <div class="box-footer">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <a th:href="@{'/'+${pageURI}}" class="btn btn-danger">Back</a>
+            </div>
+    </form>
+</div>
+<div th:replace="shared/footer"></div>

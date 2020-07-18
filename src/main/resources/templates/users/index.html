@@ -1,0 +1,98 @@
+<div th:replace="shared/header"></div>
+
+<div class="box">
+    <div class="box-header with-border">
+        <a th:href="@{'/'+${pageURI}+'/create'}" class="add-btn" title="Add new User">
+            <span class="glyphicon glyphicon-plus"></span>
+        </a>
+    </div>
+
+
+    <div th:replace="users/table"></div>
+</div>
+
+
+<div th:replace="users/components/createModal"></div>
+
+
+<div th:replace="shared/footer"></div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $('.add-btn').on('click', function () {
+
+            var $dialog = $('#form-dialog');
+            $dialog.find('.modal-title')
+                    .html('Add User');
+            $dialog.modal();
+            return false;
+        });
+        
+        
+        $('#lastName').bind('keypress blur', function(){
+            $('#userName').val($('#firstName').val()+$(this).val());
+        });
+       
+        $('#pwd1, #pwd2').bind('keypress blur', function () {
+            if ($('#pwd1').val() != $('#pwd2').val()) {
+                
+                $('#message').html('Passwords Doesn\'t Match').css('color', 'red');
+                $('#message').attr({class:'red'});
+                $('#save').attr({disabled:true});
+                $('#pwd').val("password");
+            } else {
+                
+                $('#save').attr({disabled:false});
+                $('#message').html('').css('color', 'green');
+                $('#message').attr({class:'green'});
+                $('#pwd').val($('#pwd1').val());
+            }
+        });
+    
+        //Save from modal
+        $('#app-form').on('submit',function(){
+            $.post('/users/json',$(this).serialize(),function(data){
+                if(data==='success'){
+                    $.get('/users/table', function(data){
+                        $('#view-table').html(data);
+                    });
+                    $('#form-dialog').modal('hide');
+                }
+            });
+            return false;
+        });  
+        
+        //Edit from modal
+        $('#view-table').on('click','.edit-btn', function(){
+            var $id = $(this).attr('rel');
+            $.getJSON('/users/json/'+$id, function(data){
+                $('input[name=firstName]').val(data.firstName);
+                $('input[name=lastName]').val(data.lastName);
+                $('input[name=userName]').val(data.userName);
+                $('input[name=email]').val(data.email);
+                $('input[name=contactNo]').val(data.contactNo);
+                $('input[name=address]').val(data.address);
+                $('input[name=password1]').val(data.password);
+                $('input[name=password2]').val(data.password);
+                $('input[name=id]').val(data.id);
+                $('input[name=status]').val(data.status);
+                
+                $("#role").each(function(){
+                    $(this).prepend('<option value="0" selected>Please Select</option>'); //add please select option
+                    $(this).val(data.role.id) // set it as selected
+                });
+                return false; 
+            });
+            var $dialog = $('#form-dialog');
+            $dialog.find('.modal-tile')
+                    .html('Edit User');
+            $dialog.modal();
+            return false;            
+        });
+        
+    });    
+    
+    
+</script>

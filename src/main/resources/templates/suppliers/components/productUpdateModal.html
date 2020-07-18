@@ -1,0 +1,45 @@
+
+<!-- Modal -->
+<div class="modal fade" id="product-update-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+
+            <div class="box-body">
+                    <form role="form" method="post" id="product-modal-form" action="">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" name="name" value="" class="form-control" required/>
+                            </div>
+
+<!--                            <div class="form-group">
+                                <label>Supplier</label>
+                                <select name="supplier" class="form-control" required>
+                                    <option value="">Select Supplier</option>
+                                    <option th:each="supplier:${suppliers}" th:value="${supplier.id}" th:text="${supplier.name}">Select Supplier</option>
+                                </select>
+                            </div>-->
+                                <input type="hidden" name="supplier" class="form-control" value="0" required/>
+                                <input type="hidden" name="price" class="form-control" value="0" required/>
+                                <input type="hidden" name="quantity" class="form-control" value="0" required/>
+                                <input type="hidden" name="status" value="1"/>
+                        </div>
+
+                        
+
+                    <div class="box-footer">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>   
+                        <input type="hidden" name="id" value="0"/>                 
+                        <button type="submit" class="update-product-btn btn btn-success">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>

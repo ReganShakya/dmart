@@ -1,0 +1,52 @@
+<div th:replace="shared/header"></div>
+
+<div class="box">
+    <div class="box-header with-border">
+        <a th:href="@{'/'+${pageURI}+'/create'}" class="add-btn" title="Create new Task">
+            <span class="glyphicon glyphicon-plus"></span>
+        </a>
+    </div>
+    <div th:replace="stocks/table"></div>    
+</div>
+
+<div th:replace="stocks/components/createModal"></div>
+
+<div class="box-body">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Product Name</th>                    
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="stock:${stocks}">
+                    <td th:text="${stock. name}"></td>
+                    <td th:text="${stock.quantity}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+<div th:replace="shared/footer"></div>
+
+<!--<script>
+    $(document).ready(function(){
+        
+        $('.add-btn').on('click',function(){
+           var $dialog=$('#form-dialog'); 
+           $dialog.find('.modal-title')
+                   .html('Add Stocks');
+           $dialog.modal();
+           return false;
+        });
+        
+//        $('#app-form').on('submit', function(){
+//           
+//        $.post('/stocks/json/',$(this).serialize(),function(data){
+//            
+//        });
+//        return false;
+//        });
+    });
+</script>-->

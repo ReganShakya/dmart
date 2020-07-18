@@ -1,0 +1,39 @@
+<div class="box-body" id="view-table">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Contact No</th>
+                    <th>Products</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="record:${records}">
+                    <td th:text="${record.id}"></td>
+                    <td th:text="${record.name}"></td>
+                    <td th:text="${record.address}"></td>
+                    <td th:text="${record.email}"></td>
+                    <td th:text="${record.contactNo}"></td>
+                    <td>
+                        <a th:href="@{'/'+${pageURI}+'/info/'+${record.id}}" rel="${record.id}" class="info-btn btn btn-default btn-xs" th:rel="${record.id}" th:text="${record.products.size()}"></a>
+                    </td>
+                    
+                    <td>
+<!--                        <a th:href="@{'/'+${pageURI}+'/info/'+${record.id}}" title="Info">
+                            <span class="glyphicon glyphicon-asterisk"></span>
+                        </a>-->
+                        <a th:href="@{'/'+${pageURI}+'/edit/'+${record.id}}" th:rel="${record.id}" class="btn edit-btn" title="Edit">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                        <a th:href="@{'/'+${pageURI}+'/delete/'+${record.id}}" onclick="return confirm('Are you sure to delete?')" title="Delete Task">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>

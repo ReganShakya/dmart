@@ -1,0 +1,82 @@
+<div th:replace="shared/header"></div>
+
+<div class="box">
+    <div class="box-header with-border">
+        <a th:href="@{'/'+${pageURI}+'/create'}" class="add-btn" title="Create new Task">
+            <span class="glyphicon glyphicon-plus"></span>
+        </a>
+    </div>
+
+    <div th:replace="orderDetails/table"></div>
+    <div th:replace="orderDetails/components/createModal"></div>
+    
+</div>
+
+    <div th:replace="shared/footer"></div>
+
+    <script>
+        $(document).ready(function () {
+
+
+//            $('.add-btn').on('click', function () {
+//                var $dialog = $('#form-dialog');
+//                $dialog.find('.modal-title')
+//                        .html('Add Products');
+//                $dialog.modal();
+//                return false;
+//            });
+
+            $('#supplier-id').on('change', function () {
+                $id = $(this).val();
+                $url = '/products/suppliers/' + $id;
+                $.get($url, function (data) {
+                    var select = $('#selectProduct');
+                    select.empty();
+                    select.append('<option value="">Select Product</option>');
+                    $.each(data, function (index, data) {
+                        select.append('<option value="' + data.id + '">' + data.name + '</option>');
+                    });
+                });
+
+                $('.add-btn').attr({disabled: false});
+            });
+            
+            
+            
+            $('#view-table').on('click', '.edit-btn', function () {
+                var $dialog = $('#form-dialog');
+                $dialog.find('.modal-title')
+                        .html('Add Products');
+
+                var $id = $(this).attr('rel');
+                var $oDid=$(this).attr('sup');
+
+                $url = '/products/suppliers/' + $id;
+                $.get($url, function (pro) { 
+                    var select = $('#selectProduct');
+                    select.empty();
+                    select.append('<option value="">Select Product</option>');
+                    $.each(pro, function (index, pro) {
+                        select.append('<option value="' + pro.id + '">' + pro.name + '</option>');
+                    }); 
+                    $.getJSON('/orderDetails/json/'+$oDid,function(data){  
+                        console.log(data.supplier.id);
+                        $('input[name=quantity]').val(data.quantity);
+                        $('input[name=price]').val(data.price);
+                        $('input[name=id]').val(data.id);
+                        $("#supplier select").val(data.supplier.id);
+                        $("#unit select").val(data.unit.id);
+                        $("#product select").val(data.product.id);
+                    });
+                });
+
+
+                $dialog.modal();
+                $(this).off('click');
+                return false;
+            });
+
+            
+
+        });
+    </script>

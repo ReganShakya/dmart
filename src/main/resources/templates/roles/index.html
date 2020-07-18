@@ -1,0 +1,52 @@
+<div th:replace="shared/header"></div>
+
+
+    <div th:replace="roles/table"></div>
+    <div th:replace="roles/components/createModal"></div>
+
+
+<div th:replace="shared/footer"></div>
+
+<script>
+
+    $(document).ready(function(){
+        $('.add-btn').on('click', function(){
+           var $dialog = $('#form-dialog');
+           $dialog.find('.modal-title')
+                   .html('Add Role');
+           $dialog.modal();
+           return false;
+        });
+        
+        $('#app-form').on('submit',function(){
+            $.post('/roles/json',$(this).serialize(),function(data){
+                if(data==='success'){
+                    $.get('/roles/table', function(data){
+                        $('#view-table').html(data);
+                    });
+                    $('#form-dialog').modal('hide');
+                }
+            });
+            return false;
+        });
+        
+        //Edit from modal
+        $('#view-table').on('click','.edit-btn', function(){
+            var $id = $(this).attr('rel');
+            $.getJSON('/roles/json/'+$id, function(data){
+                console.log(data.name);
+                $('input[name=name]').val(data.name);
+                $('input[name=id]').val(data.id);
+                return false; 
+            });
+            var $dialog = $('#form-dialog');
+            $dialog.find('.modal-tile')
+                    .html('Edit User');
+            $dialog.modal();
+            return false;            
+        });
+        
+        
+    });
+    
+</script>

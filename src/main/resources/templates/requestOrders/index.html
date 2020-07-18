@@ -1,0 +1,49 @@
+<div th:replace="shared/header"></div>
+
+<div class="box">
+    <div class="box-header with-border">
+        <a th:href="@{'/'+${pageURI}+'/create'}" title="Create new Task">
+            <span class="glyphicon glyphicon-plus"></span>
+        </a>
+    </div>
+
+    <div class="box-body">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>            
+                    <th>Product</th>            
+                    <th>Customer</th>
+                    <th>Quantity</th>
+                    <th>Unit</th>
+                    <th>Request Date</th> 
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="record:${records}">
+                    <td th:text="${record.id}"></td>
+                    <td th:text="${record.product.name}"></td>
+                    <td th:text="${record.customer.firstName+' '+record.customer.lastName}"></td>
+                    <td th:text="${record.qty}"></td>
+                    <td th:text="${record.unit.code}"></td>
+                    <td th:text="${record.requestDate}"></td>
+                    <td>
+                        <a th:href="@{'/'+${pageURI}+'/edit/'+${record.id}}" title="Edit Task">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                        <a th:href="@{'/'+${pageURI}+'/delete/'+${record.id}}" onclick="return confirm('Are you sure to delete?')" title="Delete Task">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+<div th:replace="shared/footer"></div>

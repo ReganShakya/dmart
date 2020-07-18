@@ -1,0 +1,26 @@
+<div class="box-body">
+    <table class="table table-bordered table-striped table-hover" id="view-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Description</th>
+                    <th>Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="record:${records}">
+                    <td th:text="${record.id}"></td>
+                    <td th:text="${record.desc}"></td>
+                    <td th:text="${record.code}"></td>
+                    <td>
+                        <a th:href="@{'/'+${pageURI}+'/edit/'+${record.id}}" th:rel="${record.id}" class="edit-btn" title="Edit Task">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                        <a th:href="@{'/'+${pageURI}+'/delete/'+${record.id}}" onclick="return confirm('Are you sure to delete?')" title="Delete Task">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>

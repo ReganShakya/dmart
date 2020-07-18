@@ -1,0 +1,232 @@
+<div th:replace="shared/header"></div>
+
+<div class="box">
+    <div class="box-header with-border">
+        <a th:href="@{'/'+${pageURI}+'/create'}" class="btn add-btn" title="Create new Task">
+            <span class="glyphicon glyphicon-plus"></span>
+        </a>
+    </div>
+
+    <div th:replace="suppliers/table"></div>
+
+    <div th:replace="suppliers/components/createModal"></div>
+    <div th:replace="suppliers/components/infoModal"></div>
+    <div th:replace="suppliers/components/productUpdateModal" class="product-update"></div>
+    
+    
+
+    <div th:replace="shared/footer"></div>
+
+
+    <script th:inline="javascript">
+
+        //generate create modal    
+        $(document).ready(function () {
+
+            //add-btn shows modal
+            $('.add-btn').on('click', function () {
+                var $dialog = $('#form-dialog');
+                $dialog.find('.modal-title')
+                        .html('Add Suppliers');
+                $dialog.modal();
+                return false;
+            });
+
+
+            //Save from modal    
+            $('#app-form').on('submit', function () {
+                
+//                console.log($(this).serialize());
+                $.post('/suppliers/json', $(this).serialize(), function (data) {
+                    if (data === 'success') {
+                        $.get('/suppliers/table', function (data) {
+                            $('#view-table').html(data);
+                        });
+                        $('#form-dialog').modal('hide');
+                    }
+                });
+                return false;
+            });
+
+
+            //Edit supplier    
+            $('#view-table').on('click', '.edit-btn', function () {
+                var $id = $(this).attr('rel');
+                console.log($id);
+                $.getJSON('suppliers/json/' + $id, function (data) {
+                    $('input[name=name]').val(data.name);
+                    $('input[name=id]').val(data.id);
+                    $('input[name=address]').val(data.address);
+                    $('input[name=email]').val(data.email);
+                    $('input[name=contactNo]').val(data.contactNo);
+
+                    var $dialog = $('#form-dialog');
+                    $dialog.find('.modal-title')
+                            .html('Edit [[${pageTitle}]]');
+                    $dialog.modal();
+                    return false;
+                });
+                return false;
+            });
+
+
+            //Modal for info display
+            $('#view-table').on('click', '.info-btn', function () {
+                var $supplierId = $(this).attr('rel');
+
+
+                $.getJSON('/suppliers/json/' + $supplierId, function (data) {
+                    $('table#info-table').find('tbody').empty();
+                    $.each(data.products, function (index, product) {
+
+                        $("table#info-table").append("<tr>");
+                        $('table#info-table tr:last').after('<td>' + product.name + '</td>' +
+                                '<td><a href="/products/edit/' + product.id + '" rel="' + product.id + '" class="btn edit-product-btn" title="Edit">\n\
+                                    <span class="glyphicon glyphicon-edit"></span>\n\
+                                    </a><a href="" rel="' + product.id + '" class="btn delete-product-btn" title="Delete">\n\
+                                    <span class="glyphicon glyphicon-trash"></span>\n\
+                                    </a></td>'
+                                );
+                        $("table#info-table").append("</tr>");
+                    });
+                    $('#supplier-name').text(data.name);
+                });
+                var $dialog = $('#info-dialog');
+                $dialog.find('.modal-title')
+                        .html('Info');
+                $dialog.modal();
+                
+                
+                //Add products of the suppliers
+                $('.product-update-btn').on('click', function () {
+//                    $('input[name=name]').val("");
+//                    e.preventDefault();
+                    $('input[name=supplier]').val($supplierId);
+                    var $dialogUpdate = $('#product-update-dialog');
+                    $dialogUpdate.find('.modal-title')
+                            .html('Add Products');
+                    $dialogUpdate.modal();
+
+                    $('#product-modal-form').one('submit', function () {
+                        $.post('/products/json', $('#product-modal-form').serialize(), function (data) {
+                            
+                            console.log(data);
+                            if (data === 'success') {
+                                $.get('/products/json', function (data) {
+                                    $('table#info-table').find('tbody').empty();
+                                    $.each(data, function (index, data) {
+                                        if (data.supplierId == $supplierId) {
+                                            $("table#info-table").append("<tr>");
+                                            $('table#info-table tr:last').after('<td>' + data.name + '</td>' +
+                                                    '<td><a rel="' + data.id + '" class="btn edit-product-btn" title="Edit">\n\
+                                                <span class="glyphicon glyphicon-edit"></span>\n\
+                                                </a><a href="" rel="' + data.id + '" class="btn delete-product-btn" title="Delete">\n\
+                                                <span class="glyphicon glyphicon-trash"></span>\n\
+                                                </a></td>');
+                                            $("table#info-table").append("</tr>");
+                                        }
+                                        $dialogUpdate.modal('hide');
+                                    });
+                                });
+                                $.get('/suppliers/table', function (data) {
+                                    $('#view-table').html(data);
+                                });
+                                $('input[name=name]').val("");
+                            }
+                        });
+                        return false;
+                    });
+                    return false;
+                });
+                
+                
+                
+                
+                //Edit product of the supplier
+                $('#info-table').on('click', '.edit-product-btn', function () {
+                    var $id = $(this).attr('rel');
+                    $.getJSON('/products/json/' + $id, function (data) {
+                        $('input[name=name]').val(data.name);
+                        $('input[name=id]').val(data.id);
+                        $('input[name=supplier]').val($supplierId);
+                        var $dialogUpdate = $('#product-update-dialog');
+                        $dialog.find('.modal-title')
+                                .html('Update Products');
+                        $('#product-modal-form').on('submit', function () {
+                            $.post('/products/json', $('#product-modal-form').serialize(), function (data) {
+                                if (data === 'success') {
+                                    $.get('/products/json', function (data) {
+                                        $('table#info-table').find('tbody').empty();
+                                        $.each(data, function (index, data) {
+                                            if (data.supplierId == $supplierId) {
+                                                $("table#info-table").append("<tr>");
+                                                $('table#info-table tr:last').after('<td>' + data.name + '</td>'+
+                                                        '<td><a href="/products/edit/' + data.id + '" rel="' + data.id + '" class="btn edit-product-btn" title="Edit">\n\
+                                                <span class="glyphicon glyphicon-edit"></span>\n\
+                                                </a><a href="" rel="' + data.id + '" class="btn delete-product-btn" title="Delete">\n\
+                                                <span class="glyphicon glyphicon-trash"></span>\n\
+                                                </a></td>');
+                                                $("table#info-table").append("</tr>");
+                                            }
+                                            $dialogUpdate.modal('hide');
+                                        });
+                                    });
+                                }
+                            });
+                            return false;
+                        });
+                        $dialogUpdate.modal();
+                        return false;
+                    });
+                    return false;
+                });
+                
+                
+                
+                
+                //Delete product of the supplier
+                $('#info-table').on('click', '.delete-product-btn', function (e) {
+                    if (confirm('Are you sure to Delete Supplier\'s product?')) {
+                        var $id = $(this).attr('rel');
+                        
+                        $.get('/products/delete-json/' + $id, function (data) {
+                         
+                            console.log("data delete");
+                            if (data === 'success') {
+                                $.get('/products/json', function (data) {
+                                    $('table#info-table').find('tbody').empty();
+                                    $.each(data, function (index, data) {
+                                        if (data.supplierId == $supplierId) {
+                                            console.log(data.name);
+                                            $("table#info-table").append("<tr>");
+                                            $('table#info-table tr:last').after('<td>' + data.name + '</td><td>' + data.quantity + '</td>' +
+                                                    '<td><a href="/products/edit/' + data.id + '" rel="' + data.id + '" class="btn edit-product-btn" title="Edit">\n\
+                                    <span class="glyphicon glyphicon-edit"></span>\n\
+                                    </a><a href="" rel="' + data.id + '" class="btn delete-product-btn" title="Delete">\n\
+                                    <span class="glyphicon glyphicon-trash"></span>\n\
+                                    </a></td>');
+                                            $("table#info-table").append("</tr>");
+                                        }
+                                    });
+                                });
+                            }
+
+                            $.get('/suppliers/table', function (data) {
+                                $('#view-table').html(data);
+                            });
+
+                        });
+                    }
+                    return false;
+                });
+                
+                
+                
+                
+                return false;
+            });
+
+
+
+        });
+    </script>

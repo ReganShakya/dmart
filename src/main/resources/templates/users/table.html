@@ -1,0 +1,37 @@
+
+    <div class="box-body">
+        <table id="view-table" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Created</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="record:${records}">
+                    <td th:text="${record.id}"></td>
+                    <td th:text="${record.userName}"></td>
+                    <td th:text="${record.email}"></td>
+                    <td th:text="${record.role.name}"></td>
+                    <td th:text="${#dates.format(record.createdDate,'YYY-MM-dd hh:mm:ss')}"></td>
+                    <td>
+                        <span th:if="${record.status}" class="label label-success">Active</span>
+                        <span th:if="${!record.status}" class="label label-danger">Inactive</span>
+                    </td>
+                    <td>
+                        <a th:href="@{'/'+${pageURI}+'/edit/'+${record.id}}" th:rel="${record.id}" class="edit-btn" title="Edit User details">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                        <a th:href="@{'/'+${pageURI}+'/delete/'+${record.id}}" th:rel="${record.id}" onclick="return confirm('Are you sure to delete?')" title="Delete Task">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>

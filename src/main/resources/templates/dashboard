@@ -1,0 +1,209 @@
+
+<div th:replace="shared/header"></div>
+
+<div class="box-header with-border">
+    <div class="form-group col-sm-3" id="product">
+        <button id="productButton">Products </button> 
+        <div id="product-show">
+            <div th:each="product:${products}">
+                <label th:text="${product.name}"></label>            
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group col-sm-3" id="stock">
+
+        <button id="stockButton">Stock </button>
+        <div id="stock-show">
+            <div th:each="stock:${stocks}">
+                <label th:text="${stock.name}"></label> 
+                <!--<a class="stock-info-btn btn btn-default btn-xs" th:rel="${stock.name}" th:text="${stock.quantity}" title="Purchase Details"></a>-->
+                <a class="stock-info-btn btn btn-default btn-xs" th:rel="${stock.name}" th:text="${stock.quantity}" title="Purchase Details"></a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-group col-sm-3" id="supplier">
+        <button id="supplierButton">Suppliers </button>
+        <div id="supplier-show">
+            <div th:each="supplier:${suppliers}">
+                <label th:text="${supplier.name}"></label>
+                <a class="info-btn btn btn-default btn-xs" th:rel="${supplier.id}" th:text="${supplier.products.size()}" title="Supplier Products"></a>
+            </div>
+
+        </div> 
+
+    </div>
+
+    <div class="form-group col-sm-3">
+        <button id="unitButton">Units </button>
+        <div id="unit-show">
+            <div id="unit" th:each="unit:${units}">
+                <label th:text="${unit.desc}"></label>
+                <label>:</label>
+                <label th:text="${unit.code}"></label>
+            </div>            
+        </div> 
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="info-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+
+            <div class='supplier-modal'>
+
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>Supplier :  </label>
+                        <p id="supplier-name">Supplier</p>
+                    </div>
+
+                    <div class="box-body">
+                        <table class="table table-bordered table-striped table-hover" id="info-table">
+                            <thead>
+                                <tr>
+                                    <th>Products</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class='stock-modal'>
+
+                <div class="box-body">
+                    <div class="form-group" id="supplierName">
+                        <label>Supplier :  </label>
+                        <!--<p id="supplier-name">Supplier</p>-->
+                    </div>
+
+                    <div class="box-body">
+                        <table class="table table-bordered table-striped table-hover" id="stock-info-table">
+                            <thead>
+                                <tr>
+                                    <th>Products</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Unit</th>
+                                    <th>Ordered Date</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="box-footer">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+</div>
+
+<div th:replace="shared/footer"></div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#title').html("DashBoard");
+        $("#product-show").hide();
+        $("#stock-show").hide();
+        $("#supplier-show").hide();
+        $("#unit-show").hide();
+
+        $('#supplier').on('click', '.info-btn', function () {
+            $('.stock-modal').attr({hidden: true});
+            $('.supplier-modal').attr({hidden: false});
+            $('#supplierName').attr({hidden: false});
+            var $supplierId = $(this).attr('rel');
+//            console.log($supplierId);
+
+            $.getJSON('/suppliers/json/' + $supplierId, function (data) {
+                $('table#info-table').find('tbody').empty();
+                $.each(data.products, function (index, product) {
+
+                    $("table#info-table").append("<tr>");
+                    $('table#info-table tr:last').after('<td>' + product.name + '</td>'
+                            );
+                    $("table#info-table").append("</tr>");
+                });
+                $('#supplier-name').text(data.name);
+            });
+            var $dialog = $('#info-dialog');
+            $dialog.find('.modal-title')
+                    .html('Supplier Products');
+            $dialog.modal();
+            return false;
+        });
+
+        $('#stock').on('click', '.stock-info-btn', function () {
+            $('.stock-modal').attr({hidden: false});
+            $('#supplierName').attr({hidden: true});
+            $('.supplier-modal').attr({hidden: true});
+            var $stockName = $(this).attr('rel');
+
+            $.getJSON('/stocks/json', function (data) {
+                console.log(data);
+                $('table#stock-info-table').find('tbody').empty();
+                $.each(data, function (index, data) {
+                    if (data.product.name == $stockName) {
+                        console.log($stockName);
+                        $("table#stock-info-table").append("<tr>");
+                        $('table#stock-info-table tr:last').after('<td>' + data.product.name + '</td>' +
+                                '<td>' + data.quantity + '</td>' +
+                                '<td>' + data.rate + '</td>' +
+                                '<td>' + data.unit.code + '</td>' +
+                                '<td>' + data.createdDate + '</td>'
+                                );
+                    }
+                });
+            });
+
+            console.log($stockName);
+            var $dialog = $('#info-dialog');
+            $dialog.find('.modal-title')
+                    .html('Products purchase deatils');
+            $dialog.modal();
+            return false;
+        });
+
+        $("#productButton").click(function () {
+            $("#product-show").slideToggle(500);
+        });
+
+        $("#stockButton").click(function () {
+            $("#stock-show").slideToggle(500);
+        });
+
+        $("#supplierButton").click(function () {
+            $("#supplier-show").slideToggle(500);
+        });
+
+        $("#unitButton").click(function () {
+            $("#unit-show").slideToggle(500);
+        });
+
+    });
+
+
+
+</script>
+
+
+

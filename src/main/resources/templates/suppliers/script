@@ -1,0 +1,49 @@
+
+
+
+            
+            
+
+
+                
+
+                
+
+                //Delete product of the supplier
+                $('#info-table').on('click', '.delete-product-btn', function () {
+                    if (confirm('Are you sure to Delete Supplier's product?')) {
+                        var $id = $(this).attr('rel');
+                        
+                        $.getJSON('/products/delete-json/' + $id, function (data) {
+                         
+                            console.log("data delete");
+                            if (data === 'success') {
+                                $.get('/products/json', function (data) {
+                                    $('table#info-table').find('tbody').empty();
+                                    $.each(data, function (index, data) {
+                                        if (data.supplierId == $supplierId) {
+                                            console.log(data.name);
+                                            $("table#info-table").append("<tr>");
+                                            $('table#info-table tr:last').after('<td>' + data.name + '</td><td>' + data.quantity + '</td>' +
+                                                    '<td><a href="/products/edit/' + data.id + '" rel="' + data.id + '" class="btn edit-product-btn" title="Edit">\n\
+                                    <span class="glyphicon glyphicon-edit"></span>\n\
+                                    </a><a href="" rel="' + data.id + '" class="btn delete-product-btn" title="Delete">\n\
+                                    <span class="glyphicon glyphicon-trash"></span>\n\
+                                    </a></td>');
+                                            $("table#info-table").append("</tr>");
+                                        }
+                                    });
+                                });
+                            }
+
+                            $.get('/suppliers/table', function (data) {
+                                $('#view-table').html(data);
+                            });
+
+                        });
+                    }
+                    return false;
+                });
+
+                return false;
+            });
